@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { LoginFormType, loginSchema } from "@/schemas/login-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -37,17 +38,20 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (value: LoginFormType) => {
-    await authClient.signIn.email({
+    await authClient.signIn.email(
+      {
         email: value.email,
-        password: value.password
-    }, {
+        password: value.password,
+      },
+      {
         onSuccess: () => {
-            router.push("/")
+          router.push("/");
         },
         onError: (ctx) => {
-            toast.error(ctx.error.message)
-        }
-    })
+          toast.error(ctx.error.message);
+        },
+      }
+    );
   };
 
   const isPending = form.formState.isSubmitting;
@@ -71,6 +75,12 @@ const LoginForm = () => {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      src={"github.svg"}
+                      alt="github"
+                      width={20}
+                      height={20}
+                    />
                     Continue with GitHub
                   </Button>
                   <Button
@@ -79,12 +89,18 @@ const LoginForm = () => {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      src={"google.svg"}
+                      alt="google"
+                      width={20}
+                      height={20}
+                    />
                     Continue with Google
                   </Button>
                 </div>
               </div>
 
-              <div className="grid gap-6">
+              <div className="grid gap-6 mt-4 mb-2">
                 <FormField
                   control={form.control}
                   name="email"
@@ -126,7 +142,7 @@ const LoginForm = () => {
                 Don't have an account?{" "}
                 <Link
                   href={"/register"}
-                  className="underline underline-offset-4"
+                  className="underline underline-offset-4 hover:text-blue-600"
                 >
                   Sign up
                 </Link>
